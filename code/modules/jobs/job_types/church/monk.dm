@@ -21,6 +21,8 @@
 	allowed_patrons = ALL_TEMPLE_PATRONS
 	job_bitflag = BITFLAG_CHURCH
 
+	exp_types_granted  = list(EXP_TYPE_CHURCH, EXP_TYPE_CLERIC)
+
 /datum/outfit/monk
 	name = "Acolyte"
 
@@ -64,7 +66,7 @@
 			wrists = /obj/item/clothing/wrists/nocwrappings
 			shoes = /obj/item/clothing/shoes/sandals
 			armor = /obj/item/clothing/shirt/robe/noc
-			H.cmode_music = 'sound/music/cmode/adventurer/CombatMonk.ogg'
+			H.cmode_music = 'sound/music/cmode/church/CombatNoc.ogg'
 			H.adjust_skillrank(/datum/skill/labor/mathematics, 2, TRUE)
 			var/language = pickweight(list("Dwarvish" = 1, "Elvish" = 1, "Hellspeak" = 1, "Zaladin" = 1, "Orcish" = 1,))
 			switch(language)
@@ -91,7 +93,7 @@
 				if("Orcish")
 					H.grant_language(/datum/language/orcish)
 					to_chat(H,span_info("\
-					I learned the tongue of the savages in my time.")
+					I learned the tongue of the Orcs in my time.")
 					)
 		if(/datum/patron/divine/pestra)
 			head = /obj/item/clothing/head/padded/pestra
@@ -116,7 +118,7 @@
 			neck = /obj/item/clothing/neck/psycross/silver/abyssor
 			shoes = /obj/item/clothing/shoes/boots
 			armor = /obj/item/clothing/shirt/robe/abyssor
-			H.cmode_music = 'sound/music/cmode/adventurer/CombatMonk.ogg'
+			H.cmode_music = 'sound/music/cmode/church/CombatAbyssor.ogg'
 			H.adjust_skillrank(/datum/skill/labor/fishing, 2, TRUE)
 			H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
 		if(/datum/patron/divine/ravox)
@@ -126,7 +128,7 @@
 			shirt = /obj/item/clothing/armor/gambeson/light
 			armor = /obj/item/clothing/armor/leather
 			cloak = /obj/item/clothing/cloak/stabard/templar/ravox
-			H.cmode_music = 'sound/music/cmode/adventurer/CombatOutlander2.ogg'
+			H.cmode_music = 'sound/music/cmode/church/CombatRavox.ogg'
 			H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 			H.adjust_skillrank(/datum/skill/combat/swords, pick(1,3), TRUE)
 			H.adjust_skillrank(/datum/skill/combat/whipsflails, pick(1,3), TRUE)
@@ -136,7 +138,7 @@
 			neck = /obj/item/clothing/neck/psycross/silver/xylix
 			shoes = /obj/item/clothing/shoes/boots
 			armor = /obj/item/clothing/shirt/robe/colored/purple
-			H.cmode_music = 'sound/music/cmode/adventurer/CombatMonk.ogg'
+			H.cmode_music = 'sound/music/cmode/church/CombatXylix.ogg'
 			H.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
 			H.adjust_skillrank(/datum/skill/misc/music, 3, TRUE)
 		if(/datum/patron/divine/malum)

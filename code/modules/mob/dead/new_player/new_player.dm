@@ -10,8 +10,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	var/ready = FALSE
 	/// Referenced when you want to delete the new_player later on in the code.
 	var/spawning = FALSE
-	/// For instant transfer once the round is set up
-	var/mob/living/new_character
 	/// Used to make sure someone doesn't get spammed with messages if they're ineligible for roles
 	var/ineligible_for_roles = FALSE
 
@@ -200,7 +198,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	if(observer.client && observer.client.prefs)
 		observer.real_name = observer.client.prefs.real_name
 		observer.name = observer.real_name
-	observer.update_appearance()
 	observer.stop_sound_channel(CHANNEL_LOBBYMUSIC)
 	QDEL_NULL(mind)
 	qdel(src)
@@ -217,7 +214,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 		if(JOB_UNAVAILABLE_RACE_BANNED)
 			return "You are currently banned from playing that species."
 		if(JOB_UNAVAILABLE_PLAYTIME)
-			return "You do not have enough relevant playtime for [jobtitle]."
+			return "You do not have enough playtime for [jobtitle]."
 		if(JOB_UNAVAILABLE_SLOTFULL)
 			return "[jobtitle] is already filled to capacity."
 		if(JOB_UNAVAILABLE_AGE)
@@ -304,16 +301,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 		return JOB_UNAVAILABLE_PLAYTIME
 	if(latejoin && !job.special_check_latejoin(client))
 		return JOB_UNAVAILABLE_GENERIC
-	if(length(job.allowed_races) && !(client.prefs.pref_species.id in job.allowed_races))
+	if((length(job.allowed_races) && !(client.prefs.pref_species.id in job.allowed_races)) || \
+		(length(job.blacklisted_species) && (client.prefs.pref_species.id in job.blacklisted_species)))
 		if(!client.has_triumph_buy(TRIUMPH_BUY_RACE_ALL))
 			return JOB_UNAVAILABLE_RACE
-/*	if(length(job.allowed_patrons) && !(client.prefs.selected_patron.type in job.allowed_patrons))
-		return JOB_UNAVAILABLE_DEITY */
-
-	#ifdef USES_PQ
-	if(!isnull(job.min_pq) && (get_playerquality(ckey) < job.min_pq))
-		return JOB_UNAVAILABLE_QUALITY
-	#endif
 	if(length(job.allowed_sexes) && !(client.prefs.gender in job.allowed_sexes))
 		return JOB_UNAVAILABLE_SEX
 	if(length(job.allowed_ages) && !(client.prefs.age in job.allowed_ages))
@@ -393,6 +384,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 		GLOB.company_positions,
 		GLOB.youngfolk_positions,
 		GLOB.allmig_positions,
+		GLOB.inquisition_positions,
 	)
 
 	for(var/category_raw in omegalist)

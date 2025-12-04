@@ -52,7 +52,7 @@
 
 /obj/structure/fake_machine/headeater
 	name = "head eating HAILER"
-	desc = "A machine that feeds on certain heads for coin, this itteration seems unfinished, what a sell out."
+	desc = "A machine that feeds on certain heads for coin, this iteration seems unfinished, what a sell out."
 	icon = 'icons/roguetown/misc/machines.dmi'
 	icon_state = "headeater"
 	density = FALSE
@@ -82,6 +82,7 @@
 		if(E.headprice > 0)
 			to_chat(user, span_danger("the [src] consumes the [E] spitting out coins in its place!"))
 			budget2change(E.headprice, user)
+			record_round_statistic(STATS_HEADEATER_EXPORTS, E.headprice)
 			qdel(E)
 			return
 
@@ -90,6 +91,7 @@
 		if(A.headprice > 0)
 			to_chat(user, span_danger("the [src] consumes the [A] spitting out coins in its place!"))
 			budget2change(A.headprice, user)
+			record_round_statistic(STATS_HEADEATER_EXPORTS, A.headprice)
 			qdel(A)
 			return
 
@@ -100,6 +102,7 @@
 			to_chat(user, span_danger("as the [src] consumes [D] without a trace, you are hit with a wistful feeling, your past...gone in an instant."))
 			user.add_stress(/datum/stress_event/destroyed_past)
 			budget2change(D.headprice, user)
+			record_round_statistic(STATS_HEADEATER_EXPORTS, D.headprice)
 			qdel(D)
 			return
 	*/
@@ -108,4 +111,5 @@
 		if(Y.headprice > 0)
 			to_chat(user, span_danger("the [src] consumes the [Y] spitting out coins in its place!"))
 			budget2change(Y.headprice, user)
+			record_round_statistic(STATS_HEADEATER_EXPORTS, Y.headprice)
 			qdel(Y)

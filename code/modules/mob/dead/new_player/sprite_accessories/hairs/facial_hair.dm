@@ -7,6 +7,14 @@
 	icon = 'icons/roguetown/mob/facial.dmi'
 	gender = MALE
 
+/datum/sprite_accessory/hair/facial/rakshari
+	icon = 'icons/mob/sprite_accessory/hair/facial/rakshari.dmi'
+	gender = MALE
+
+/datum/sprite_accessory/hair/facial/triton
+	icon = 'icons/mob/sprite_accessory/hair/facial/triton.dmi'
+	gender = FEMALE || MALE
+
 /datum/sprite_accessory/hair/facial/none
 	name = "None"
 	icon_state = ""
@@ -118,4 +126,41 @@
 	name = "Wise Hermit"
 	icon_state = "facial_moonshiner"
 	gender = MALE
+	specuse = list(SPEC_ID_HUMEN, SPEC_ID_DWARF, SPEC_ID_ELF, SPEC_ID_TIEFLING)
+
+/datum/sprite_accessory/hair/facial/rakshari/kesh
+	name = "Kesh"
+	icon_state = "kesh"
+	gender = MALE
+	specuse = list(SPEC_ID_RAKSHARI)
+
+/datum/sprite_accessory/hair/facial/rakshari/spry
+	name = "Spry"
+	icon_state = "spry"
+	gender = MALE
+	specuse = list(SPEC_ID_RAKSHARI)
+
+/datum/sprite_accessory/hair/facial/rakshari/whiskered
+	name = "Whiskered"
+	icon_state = "whiskered"
+	gender = MALE
+	specuse = list(SPEC_ID_RAKSHARI)
+
+/datum/sprite_accessory/hair/facial/rakshari/jinni
+	name = "Jinni"
+	icon_state = "jinni"
+	gender = MALE
+	specuse = list(SPEC_ID_RAKSHARI)
+
+/datum/sprite_accessory/hair/facial/triton/seaqueen
+	name = "Seaqueen"
+	icon_state = "seaqueen"
+	gender = FEMALE
+	specuse = list(SPEC_ID_TRITON)
+
+/datum/sprite_accessory/hair/facial/triton/catfish
+	name = "Catfish"
+	icon_state = "catfish"
+	gender = FEMALE
+	specuse = list(SPEC_ID_TRITON)
 	specuse = list(SPEC_ID_HUMEN, SPEC_ID_DWARF, SPEC_ID_ELF, SPEC_ID_TIEFLING)

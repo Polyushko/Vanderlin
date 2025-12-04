@@ -393,7 +393,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 			cmd_admin_mute(src, mute_type, 1)
 			return 1
 		if(src.last_message_count >= SPAM_TRIGGER_WARNING)
-			to_chat(src, "<span class='danger'>I are nearing the spam filter limit for identical messages.</span>")
+			to_chat(src, "<span class='danger'>I am nearing the spam filter limit for identical messages.</span>")
 			return 0
 	else
 		last_message = message
@@ -420,7 +420,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		return null
 
 	GLOB.clients += src
-	GLOB.keys_by_ckey[ckey] += key
+	GLOB.keys_by_ckey[ckey] = key
 	GLOB.directory[ckey] = src
 
 	chatOutput = new /datum/chatOutput(src)
@@ -1104,6 +1104,8 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	return failed
 
 /client/Click(atom/object, atom/location, control, params)
+	if(SEND_SIGNAL(src, COMSIG_CLIENT_CLICK_DIRTY, object, location, control, params, usr))
+		return
 	if(isatom(object) && HAS_TRAIT(mob, TRAIT_IN_FRENZY))
 		return
 

@@ -5,7 +5,6 @@
 	outfit = /datum/outfit/adventurer/grenzelhoft
 	category_tags = list(CTAG_PILGRIM)
 	total_positions = 1
-	roll_chance = 30
 	min_pq = 0
 	is_recognized = TRUE
 
@@ -47,7 +46,7 @@
 		var/prev_real_name = H.real_name
 		var/prev_name = H.name
 		var/honorary = "Count"
-		if(H.gender == FEMALE)
+		if(H.pronouns == SHE_HER)
 			honorary = "Countess"
 		H.real_name = "[honorary] [prev_real_name]"
 		H.name = "[honorary] [prev_name]"

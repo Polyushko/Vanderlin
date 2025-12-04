@@ -81,14 +81,6 @@
 	if(length(prevent_crits) || armor_class)
 		has_inspect_verb = TRUE
 
-	if(uses_lord_coloring)
-		if(GLOB.lordprimary && GLOB.lordsecondary)
-			lordcolor()
-		else
-			RegisterSignal(SSdcs, COMSIG_LORD_COLORS_SET, TYPE_PROC_REF(/obj/item/clothing, lordcolor))
-	else if(get_detail_color()) // Lord color does this
-		update_appearance(UPDATE_OVERLAYS)
-
 	if(hoodtype)
 		MakeHood()
 
@@ -317,16 +309,6 @@
 	for(var/trait in clothing_traits)
 		ADD_CLOTHING_TRAIT(user, trait)
 
-/obj/item/clothing/update_overlays()
-	. = ..()
-	if(!get_detail_tag())
-		return
-	var/mutable_appearance/pic = mutable_appearance(icon, "[icon_state][detail_tag]")
-	pic.appearance_flags = RESET_COLOR
-	if(get_detail_color())
-		pic.color = get_detail_color()
-	. += pic
-
 /**
  * Inserts a trait (or multiple traits) into the clothing traits list
  *
@@ -497,11 +479,11 @@ BLIND     // can't see anything
 			var/mob/living/carbon/human/H = src.loc
 			if(hood.color != color)
 				hood.color = color
-			if(slot_flags == ITEM_SLOT_ARMOR)
+			if(slot_flags & ITEM_SLOT_ARMOR)
 				if(H.wear_armor != src)
 					to_chat(H, "<span class='warning'>I should put that on first.</span>")
 					return
-			if(slot_flags == ITEM_SLOT_CLOAK)
+			if(slot_flags & ITEM_SLOT_CLOAK)
 				if(H.cloak != src)
 					to_chat(H, "<span class='warning'>I should put that on first.</span>")
 					return

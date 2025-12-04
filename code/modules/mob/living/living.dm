@@ -7,7 +7,10 @@
 				GLOB.weatherproof_z_levels |= "[turf.z]"
 		if("[turf.z]" in GLOB.weatherproof_z_levels)
 			faction |= FACTION_MATTHIOS
-			SSmobs.matthios_mobs |= src
+			SSmatthios_mobs.register_mob(src)
+		if(SSterrain_generation.get_island_at_location(turf))
+			faction |= "islander"
+			SSisland_mobs.register_mob(src, SSterrain_generation.get_island_at_location(turf))
 
 /mob/living/Initialize()
 	. = ..()
@@ -27,7 +30,10 @@
 
 /mob/living/Destroy()
 	if(FACTION_MATTHIOS in faction)
-		SSmobs.matthios_mobs -= src
+		SSmatthios_mobs.unregister_mob(src)
+	if(cached_island_id)
+		SSisland_mobs.remove_mob(src)
+
 	surgeries = null
 	if(LAZYLEN(status_effects))
 		for(var/s in status_effects)
@@ -538,7 +544,7 @@
 		var/mob/living/living = AM
 		for(var/hand in living.hud_used?.hand_slots)
 			var/atom/movable/screen/inventory/hand/H = living.hud_used.hand_slots[hand]
-			H?.update_appearance()
+			H?.update_appearance(UPDATE_OVERLAYS)
 
 /mob/living/proc/is_limb_covered(obj/item/bodypart/limb)
 	if(!limb)
@@ -595,6 +601,13 @@
 		if(ismob(pulling))
 			var/mob/living/M = pulling
 			M.reset_offsets("pulledby")
+			if(HAS_TRAIT(M, TRAIT_GARROTED))
+				var/obj/item/inqarticles/garrote/gcord = src.get_active_held_item()
+				if(!istype(gcord))
+					gcord = src.get_inactive_held_item()
+				if(istype(gcord))
+					gcord.wipeslate(src)
+
 			if(grab_state >= GRAB_AGGRESSIVE)
 				TIMER_COOLDOWN_START(pulling, "broke_free", max(0, 2 SECONDS - (0.2 SECONDS * get_skill_level(/datum/skill/combat/wrestling)))) // BUFF: Reduced cooldown
 
@@ -1066,8 +1079,6 @@
 			update_vision_cone()
 
 /mob/living/proc/makeTrail(turf/target_turf, turf/start, direction)
-	if(!has_gravity())
-		return
 	var/blood_exists = FALSE
 
 	for(var/obj/effect/decal/cleanable/trail_holder/C in start) //checks for blood splatter already on the floor
@@ -1337,7 +1348,7 @@
 
 		return TRUE
 
-	to_chat(src, span_warning("I fail to do a counter attack!"))
+	to_chat(src, span_warning("I fail to do a counterattack!"))
 	return FALSE
 
 /mob/living/proc/get_positioning_modifier(mob/living/target)
@@ -1473,10 +1484,25 @@
 	var/shitte = ""
 	if(client?.prefs.showrolls)
 		shitte = " ([resist_chance]%)"
+	if(HAS_TRAIT(src, TRAIT_GARROTED))
+		var/obj/item/inqarticles/garrote/gcord = L.get_active_held_item()
+		if(!gcord)
+			gcord = L.get_inactive_held_item()
+		to_chat(pulledby, span_warning("[src] struggles against the [gcord]!"))
+		if(!src.mind) // NPCs do less damage to the garrote
+			gcord.take_damage(5)
+		else
+			gcord.take_damage(10)
 	if(prob(resist_chance))
 		visible_message("<span class='warning'>[src] breaks free of [pulledby]'s grip!</span>", \
 						"<span class='notice'>I break free of [pulledby]'s grip![shitte]</span>", null, null, pulledby)
 		to_chat(pulledby, "<span class='danger'>[src] breaks free of my grip!</span>")
+		if(HAS_TRAIT(src, TRAIT_GARROTED))
+			var/obj/item/inqarticles/garrote/gcord = L.get_active_held_item()
+			if(!gcord)
+				gcord = L.get_inactive_held_item()
+			gcord.take_damage(gcord.max_integrity * 0.2)
+			gcord.wipeslate(src)
 		log_combat(pulledby, src, "broke grab")
 		pulledby.stop_pulling()
 
@@ -1487,9 +1513,15 @@
 		playsound(src.loc, 'sound/combat/grabbreak.ogg', 50, TRUE, -1)
 		return FALSE
 	else
-		visible_message("<span class='warning'>[src] struggles to break free from [pulledby]'s grip!</span>", \
-						"<span class='warning'>I struggle against [pulledby]'s grip![shitte]</span>", null, null, pulledby)
-		to_chat(pulledby, "<span class='warning'>[src] struggles against my grip!</span>")
+		if(!HAS_TRAIT(src, TRAIT_GARROTED))
+			visible_message(span_warning("[src] struggles to break free from [L]'s grip!"), \
+						span_warning("I struggle against [L]'s grip![resist_chance]"), null, null, L)
+		else
+			var/obj/item/inqarticles/garrote/gcord = L.get_active_held_item()
+			if(!gcord)
+				gcord = L.get_inactive_held_item()
+			visible_message(span_warning("[src] struggles to break free from [L]'s [gcord]!"), \
+						span_warning("I struggle against [L]'s [gcord]![resist_chance]"), null, null, L)
 		playsound(src.loc, 'sound/combat/grabstruggle.ogg', 50, TRUE, -1)
 		return TRUE
 
@@ -1709,15 +1741,11 @@
 		to_chat(src, span_warning("You need more light to do this!"))
 		return FALSE
 
-	if((action_bitflags & NEED_GRAVITY) && !has_gravity())
-		to_chat(src, span_warning("You need gravity to do this!"))
-		return FALSE
-
 	return TRUE
 
 /mob/living/proc/can_use_guns(obj/item/G)//actually used for more than guns!
 	if(G.trigger_guard == TRIGGER_GUARD_NONE)
-		to_chat(src, "<span class='warning'>I are unable to fire this!</span>")
+		to_chat(src, "<span class='warning'>I am unable to fire this!</span>")
 		return FALSE
 	if(G.trigger_guard != TRIGGER_GUARD_ALLOW_ALL && !IsAdvancedToolUser())
 		to_chat(src, "<span class='warning'>I try to fire [G], but can't use the trigger!</span>")
@@ -1881,6 +1909,10 @@
 /mob/living/proc/SoakMob(locations)
 	if(locations & CHEST)
 		ExtinguishMob()
+		if(locations & HEAD)
+			adjust_fire_stacks(-2)
+		else
+			adjust_fire_stacks(-1)
 
 /mob/living/proc/ExtinguishMob()
 	if(on_fire)
@@ -2394,6 +2426,12 @@
 					found_ping(get_turf(M), client, "trap")
 			if(istype(O, /obj/structure/flora/grass/maneater/real))
 				found_ping(get_turf(O), client, "trap")
+			if(istype(O, /obj/structure/lever/hidden))
+				var/obj/structure/lever/hidden/lever = O
+				// they're trained at this
+				var/bonuses = (HAS_TRAIT(src, TRAIT_THIEVESGUILD) || HAS_TRAIT(src, TRAIT_ASSASSIN)) ? 2 : 0
+				if(stat_roll(STATKEY_PER, 25, lever.hidden_dc - bonuses - 1) || istype(lever, /obj/structure/lever/hidden/keep && HAS_TRAIT(src, TRAIT_KNOWKEEPPLANS)))
+					found_ping(get_turf(O), client, "hidden")
 
 		for(var/obj/effect/skill_tracker/potential_track in orange(7, src)) //Can't use view because they're invisible by default.
 			if(!can_see(src, potential_track, 10))
@@ -2589,7 +2627,7 @@
 
 	for(var/hand in hud_used?.hand_slots)
 		var/atom/movable/screen/inventory/hand/H = hud_used.hand_slots[hand]
-		H?.update_appearance()
+		H?.update_appearance(UPDATE_OVERLAYS)
 
 	if(isnull(new_pulledby))
 		reset_pull_offsets()
@@ -2605,8 +2643,10 @@
 
 	SEND_SIGNAL(src, COMSIG_LIVING_BEFRIENDED, new_friend)
 
-	if(src in SSmobs.matthios_mobs)
-		SSmobs.matthios_mobs -= src
+	if(src in SSmatthios_mobs.matthios_mobs)
+		SSmatthios_mobs.unregister_mob(src)
+	if(cached_island_id)
+		SSisland_mobs.remove_mob(src)
 
 	return TRUE
 
@@ -2885,3 +2925,19 @@
 
 /mob/living/proc/is_dead() // bwuh
 	return (!QDELETED(src) && (stat >= DEAD))
+
+/// Set the eyesclosed var updating blindness and UI as needed
+/mob/living/proc/set_eyes_closed(closed)
+	if(eyesclosed == closed)
+		return
+
+	eyesclosed = closed
+
+	if(eyesclosed)
+		become_blind("eyelids")
+	else
+		cure_blind("eyelids")
+
+	if(hud_used)
+		var/atom/movable/screen/eye_intent/eyet = locate() in hud_used.static_inventory
+		eyet?.update_appearance(UPDATE_ICON)

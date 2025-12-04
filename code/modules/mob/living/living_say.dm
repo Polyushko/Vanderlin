@@ -317,7 +317,7 @@
 
 	for(var/atom/movable/hearing_movable as anything in listening)
 		if(!hearing_movable)
-			stack_trace("somehow theres a null returned from get_hearers_in_view() in send_speech!")
+			stack_trace("somehow there's a null returned from get_hearers_in_view() in send_speech!")
 			continue
 
 		var/ignore_z = FALSE
@@ -437,7 +437,7 @@
 	return TRUE
 
 /mob/living/proc/can_speak_vocal(message) //Check AFTER handling of xeno and ling channels
-	if(HAS_TRAIT(src, TRAIT_MUTE))
+	if(HAS_TRAIT(src, TRAIT_MUTE) || HAS_TRAIT(src, TRAIT_BAGGED))
 		return FALSE
 
 	if(is_muzzled())

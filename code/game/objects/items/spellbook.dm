@@ -1,7 +1,7 @@
 /**
  * Spellbooks for learning arcane points.
  * Difficult to learn by default, has multipliers for weed, gems and rituals.
- * Inherits most of it's functionality from default granters, however also has some copy paste from roguebooks for parity.
+ * Inherits most of its functionality from default granters, however also has some copy paste from roguebooks for parity.
  */
 
 /obj/item/book/granter/spellbook
@@ -176,7 +176,7 @@
 		qualityoflearn += rune.spellbonus
 		rune.do_invoke_glow()
 	if(stored_gem)
-		to_chat(user, span_smallnotice("I can feel the magical energies imbued within the crystaline dust scattered upon my tome resonate with the arcyne..."))
+		to_chat(user, span_smallnotice("I can feel the magical energies imbued within the crystalline dust scattered upon my tome resonate with the arcyne..."))
 		qualityoflearn += stored_gem
 		stored_gem = FALSE
 	if(!isarcyne(user))
@@ -227,7 +227,7 @@
 			if(src.allowed_readers.len <= 2 && !src.allowed_readers.Find(user))
 				src.allowed_readers += M
 			else
-				to_chat(user, span_smallnotice("I can't change this pleboid to my tome..."))
+				to_chat(user, span_smallnotice("I can't chain this pleboid to my tome..."))
 			playsound(src.loc, "punch", 25, TRUE, -1)
 			log_combat(user, M, "attacked", src)
 	else
@@ -237,7 +237,7 @@
 /// Book Types:
 /obj/item/book/granter/spellbook/horrible	//makeable with magic stones (bad quality ones)
 	name = "poorly made tome of the arcyne"
-	desc = "A poorly made book,  it barely glows with arcyne and has only small notes on arcyne symbols."
+	desc = "A poorly made book, it barely glows with arcyne and has only small notes on arcyne symbols."
 	bookquality = 1
 	sellprice = 15
 
@@ -249,13 +249,13 @@
 
 /obj/item/book/granter/spellbook/apprentice	//apprentices get made with obsidian
 	name = "apprentice tome of the arcyne"
-	desc = "A carefully made book,  faintly glowing with arcyne and half filled with notes and theory on arcyne symbols."
+	desc = "A carefully made book, faintly glowing with arcyne and half filled with notes and theory on arcyne symbols."
 	bookquality = 3
 	sellprice = 75
 
 /obj/item/book/granter/spellbook/adept	//refugee mages &normal loot
 	name = "adept tome of the arcyne"
-	desc = "A well made book,  it shines moderately with arcyne light. It has been filled with notes of varying degrees on the arcyne "
+	desc = "A well-made book, it shines moderately with arcyne light. It has been filled with notes of varying degrees on the arcyne "
 	bookquality = 4
 	sellprice = 150
 
@@ -273,7 +273,7 @@
 
 /obj/item/book/granter/spellbook/legendary	//max tier lootmade item
 	name = "legendary tome of the arcyne"
-	desc = "An incredible book that gives off glowing arcyne motes,  it is filled with runes and arcyne theories that is hard for even masters of arcyne to understand. The arcyne script glows and practically whispers from the page.."
+	desc = "An incredible book that gives off glowing arcyne motes, it is filled with runes and arcyne theories that is hard for even masters of arcyne to understand. The arcyne script glows and practically whispers from the page.."
 	bookquality = 12
 	sellprice = 400
 
@@ -343,7 +343,7 @@
 /obj/item/spellbook_unfinished/pre_arcyne/attackby(obj/item/P, mob/living/carbon/human/user, params)
 	var/found_table = locate(/obj/structure/table) in (loc)
 	if(istype(P, /obj/item/gem/amethyst))
-		user.visible_message(span_notice("I run my arcyne energy into the crystal. It's artifical lattices pulse and then fall dormant. It must not be strong enough to make a spellbook with!"))
+		user.visible_message(span_notice("I run my arcyne energy into the crystal. Its artificial lattices pulse and then fall dormant. It must not be strong enough to make a spellbook with!"))
 		return
 	if(istype(P, /obj/item/gem/violet))
 		if(isturf(loc)&& (found_table))
@@ -440,7 +440,7 @@
 								qdel(src)
 						else
 							user.visible_message(span_warning("[user] sets down [the_rock] upon the surface of [src] and watches expectantly. Without warning, the rock violently pops like a squashed gourd!"), \
-							span_notice("No! My precious stone! It musn't have wanted to share its mysteries with me..."))
+							span_notice("No! My precious stone! It mustn't have wanted to share its mysteries with me..."))
 							user.electrocute_act(5, src)
 							qdel(P)
 		else

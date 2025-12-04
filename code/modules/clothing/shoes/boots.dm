@@ -40,7 +40,7 @@
 	item_state = "soldierboots"
 	desc = "Lightly armored boots made from iron offering protection against both melee and ranged attacks."
 	armor = list("blunt" = 80, "slash" = 80, "stab" = 80,  "piercing" = 60, "fire" = 0, "acid" = 0)
-	max_integrity = INTEGRITY_STANDARD + 50
+	max_integrity = INTEGRITY_STRONG + 50
 	armor_class = AC_MEDIUM
 	sellprice = 20
 	item_weight = 7 * IRON_MULTIPLIER
@@ -125,7 +125,7 @@
 
 /obj/item/clothing/shoes/boots/leather/masterwork
 	name = "masterwork leather boots"
-	desc = "These boots are a craftsmanship marvel. Made with the finest leather. Strong, nimible, reliable."
+	desc = "These boots are a craftsmanship marvel. Made with the finest leather. Strong, nimble, reliable."
 	max_integrity = INTEGRITY_STANDARD + 100
 	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST, BCLASS_CHOP) //we're adding chop here!
 	armor = list("blunt" = 80, "slash" = 60, "stab" = 40, "piercing" = 0,"fire" = 0, "acid" = 0)
@@ -162,7 +162,7 @@
 
 /obj/item/clothing/shoes/boots/clothlinedanklets
 	name = "cloth lined anklets"
-	desc = "Cloth anklets lined with with fibers, foot remains bare."
+	desc = "Cloth anklets lined with fibers, foot remains bare."
 	gender = PLURAL
 	icon_state = "clothlinedanklets"
 	item_state = "furlinedanklets"
@@ -175,7 +175,7 @@
 
 /obj/item/clothing/shoes/boots/armor/vampire
 	name = "ancient ceremonial boots"
-	desc = "Antediluvian boots with ceremonial ornamets from ages past."
+	desc = "Antediluvian boots with ceremonial ornaments from ages past."
 	icon_state = "vboots"
 	item_state = "vboots"
 	prevent_crits = ALL_CRITICAL_HITS_VAMP

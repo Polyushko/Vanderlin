@@ -31,8 +31,26 @@
 /// Whether the job can be displayed on the actors list
 #define JOB_SHOW_IN_ACTOR_LIST (1<<4)
 
+#define ALL_FACTIONS list( \
+	FACTION_NONE, \
+	FACTION_NEUTRAL, \
+	FACTION_HOSTILE, \
+	FACTION_TOWN, \
+	FACTION_FOREIGNERS, \
+	FACTION_MIGRANTS, \
+	FACTION_UNDEAD, \
+	FACTION_PLANTS, \
+	FACTION_VINES, \
+	FACTION_CABAL, \
+	FACTION_RATS, \
+	FACTION_ORCS, \
+	FACTION_BUMS, \
+	FACTION_MATTHIOS \
+)
+
 #define FACTION_NONE		"None"
 #define FACTION_NEUTRAL		"Neutral"
+#define FACTION_HOSTILE		"Hostile"
 #define FACTION_TOWN		"Town"
 #define FACTION_FOREIGNERS  "Foreigners"
 #define FACTION_MIGRANTS  	"Migrants"
@@ -54,6 +72,7 @@
 #define YOUNGFOLK		(1<<6)
 #define OUTSIDERS		(1<<7)
 #define COMPANY			(1<<8)
+#define INQUISITION 	(1<<9)
 
 #define UNDEAD			(1<<10)
 
@@ -63,7 +82,7 @@
 #define JCOLOR_SOLDIER "#b64949"
 #define JCOLOR_SERF "#669968"
 #define JCOLOR_PEASANT "#936d6c"
-
+#define JCOLOR_INQUISITION "#FF0000"
 
 // job display orders //
 
@@ -101,7 +120,6 @@
 #define JDO_GRAVETENDER 15
 #define JDO_CHURCHLING 15.1
 
-#define JDO_PURITAN 16
 #define JDO_SHEPHERD 17
 #define JDO_TEMPLAR 17.1
 
@@ -154,8 +172,12 @@
 #define JDO_ORPHAN 37
 #define JDO_SOILCHILD 38
 
+#define JDO_PURITAN 40
+#define JDO_ORTHODOXIST	40.1
+#define JDO_ABSOLVER 40.2
 
 #define BITFLAG_CHURCH (1<<0)
 #define BITFLAG_ROYALTY (1<<1)
 #define BITFLAG_CONSTRUCTOR (1<<2)
 #define BITFLAG_GARRISON (1<<3)
+

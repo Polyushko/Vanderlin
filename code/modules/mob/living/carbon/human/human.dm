@@ -3,6 +3,48 @@
 	if(!user)
 		return
 	var/obj/item/held_item = user.get_active_held_item()
+	if(user.cmode)
+		if(held_item && (user.zone_selected == BODY_ZONE_PRECISE_NECK))
+			if(held_item.get_sharpness() && held_item.wlength == WLENGTH_SHORT)
+				playsound(src, 'sound/surgery/scalpel1.ogg', 100, TRUE, -1)
+				if(user == src)
+					user.visible_message("<span class='danger'>[user] starts to slit [user.p_their()] throat with [held_item].</span>")
+				else
+					user.visible_message("<span class='danger'>[user] starts to slit [src]'s throat with [held_item].</span>")
+				if(do_after(user, 5 SECONDS, src))
+					var/obj/item/bodypart/part = src.get_bodypart(BODY_ZONE_PRECISE_NECK)
+					part.add_wound(/datum/wound/artery/neck)
+	else
+		if(held_item && (user.zone_selected == BODY_ZONE_PRECISE_MOUTH))
+			if(held_item.get_sharpness() && held_item.wlength == WLENGTH_SHORT)
+				var/datum/bodypart_feature/hair/facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
+				if(has_stubble)
+					playsound(src, 'sound/foley/shaving.ogg', 100, TRUE, -1)
+					if(user == src)
+						user.visible_message("<span class='danger'>[user] starts to shave [user.p_their()] stubble with [held_item].</span>")
+					else
+						user.visible_message("<span class='danger'>[user] starts to shave [src]'s stubble with [held_item].</span>")
+					if(do_after(user, 5 SECONDS, src))
+						has_stubble = FALSE
+						update_body()
+					else
+						held_item.melee_attack_chain(user, src, params)
+				else if(facial?.accessory_type != /datum/sprite_accessory/hair/facial/none)
+					playsound(src, 'sound/foley/shaving.ogg', 100, TRUE, -1)
+					if(user == src)
+						user.visible_message("<span class='danger'>[user] starts to shave [user.p_their()] facehairs with [held_item].</span>")
+					else
+						user.visible_message("<span class='danger'>[user] starts to shave [src]'s facehairs with [held_item].</span>")
+					if(do_after(user, 5 SECONDS, src))
+						set_facial_hair_style(/datum/sprite_accessory/hair/facial/none)
+						update_body()
+						record_round_statistic(STATS_BEARDS_SHAVED)
+						if(dna?.species)
+							if(dna.species.id == SPEC_ID_DWARF)
+								var/mob/living/carbon/V = src
+								V.add_stress(/datum/stress_event/dwarfshaved)
+					else
+						held_item.melee_attack_chain(user, src, params)
 	if(held_item && (user.zone_selected == BODY_ZONE_PRECISE_MOUTH))
 		if(held_item.get_sharpness() && held_item.wlength == WLENGTH_SHORT)
 			var/datum/bodypart_feature/hair/facial = get_bodypart_feature_of_slot(BODYPART_FEATURE_FACIAL_HAIR)
@@ -491,7 +533,7 @@
 					hud_used.energy.icon_state = "stam10"
 
 	if(hud_used.zone_select && !stamina_only)
-		hud_used.zone_select.update_appearance()
+		hud_used.zone_select.update_appearance(UPDATE_OVERLAYS)
 
 /mob/living/carbon/human/fully_heal(admin_revive = FALSE)
 	dna?.species.spec_fully_heal(src)
@@ -883,7 +925,10 @@
 				GLOB.weatherproof_z_levels |= "[turf.z]"
 		if("[turf.z]" in GLOB.weatherproof_z_levels)
 			faction |= FACTION_MATTHIOS
-			SSmobs.matthios_mobs |= src
+			SSmatthios_mobs.register_mob(src)
+		if(SSterrain_generation.get_island_at_location(turf))
+			faction |= "islander"
+			SSisland_mobs.register_mob(src, SSterrain_generation.get_island_at_location(turf))
 
 /**
  * Called when this human should be washed
