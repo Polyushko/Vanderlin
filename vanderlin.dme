@@ -3459,7 +3459,6 @@
 #include "modular\kaizoku\code\spells\graggarspells\hellish.dm"
 #include "modular\kaizoku\code\spells\graggarspells\hellsteal.dm"
 #include "modular\kaizoku\code\spells\witchspells\aoedisease.dm"
-#include "modular\kaizoku\code\spells\witchspells\corruption.dm"
 #include "modular\kaizoku\code\spells\witchspells\froggiecurse.dm"
 #include "modular\kaizoku\code\spells\witchspells\witchpowder.dm"
 #include "modular\kaizoku\code\spells\witchspells\withering.dm"
