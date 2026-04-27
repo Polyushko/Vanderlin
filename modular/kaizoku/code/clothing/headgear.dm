@@ -64,6 +64,15 @@
 	desc = "A hat typically worn by the masterless shuhen zamurais, the ronins."
 	bloody_icon_state = null
 
+/obj/item/clothing/head/tengai/biggasa
+	name = "kyodainagasa"
+	icon_state = "bighat"
+	flags_inv = HIDEEARS|HIDEFACE
+	desc = "For when a normal hat does not provide enough shelter from the torrent."
+	icon = 'modular/kaizoku/w/head icon.dmi'
+	mob_overlay_icon = 'modular/kaizoku/w/head.dmi'
+	bloody_icon_state = null
+
 /obj/item/clothing/head/tengai/torioigasa
 	name = "birdchaser umbrella hat"
 	icon_state = "torioigasa"
@@ -789,6 +798,22 @@
 	name = "coastal pothat"
 	desc = "Infantry headgear of Coastal design in a bowl-like silhouette, having a large brim protecting the eyes from the sun."
 	icon_state = "ffs_kettle"
+
+/obj/item/clothing/head/helmet/kettle/kaizoku/yuan
+	name = "dustwalker pothelm"
+	desc = "A light helmet of simple design commonly used by the dustwalker peoples."
+	icon_state = "yuan"
+	icon = 'modular/kaizoku/w/head icon.dmi'
+	mob_overlay_icon = 'modular/kaizoku/w/head.dmi'
+
+/obj/item/clothing/head/helmet/sallet/peaked
+	name = "peaked helmet"
+	desc = "A helmet with a brow resembling that of a hawk's beak, of solid make."
+	icon_state = "peaked"
+	icon = 'modular/kaizoku/w/head icon.dmi'
+	mob_overlay_icon = 'modular/kaizoku/w/head.dmi'
+	bloody_icon = 'icons/effects/blood64x64.dmi'
+	bloody_icon_state = "helmetblood_big"
 
 /obj/item/clothing/head/helmet/kettle/kaizoku/shuhen //the same as a Kettle. Just don't want the 64x64 bits.
 	name = "armored umbrella helmet"
